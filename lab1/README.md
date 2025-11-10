@@ -332,5 +332,115 @@ sudo systemctl reload nginx
 
 <img width="847" height="277" alt="Screenshot from 2025-11-10 20-47-20" src="https://github.com/user-attachments/assets/9a05b121-77e8-4de2-87f9-5b558312426d" />
 
+## Шаг 6. Нстройка принудительного редиректа с HTTP на HTTPS
+
+### Изменяем конфиг проекта А
+Добавляем новый блок, отвечающий за редирект с HTTP на HTTPS
+
+```
+# --- HTTP -> HTTPS redirect ---
+server {
+    listen 80;
+    server_name project-a.local;
+    return 301 https://$server_name$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name project-a.local;
+
+    ssl_certificate /etc/nginx/ssl/project-a.crt;
+    ssl_certificate_key /etc/nginx/ssl/project-a.key;
+
+    root /var/www/project_a;
+    index index.html index.htm;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}
+```
+
+### То же самое для проекта B
+```
+# --- HTTP -> HTTPS redirect ---
+server {
+    listen 80;
+    server_name project-b.local;
+    return 301 https://$server_name$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name project-b.local;
+
+    ssl_certificate /etc/nginx/ssl/project-b.crt;
+    ssl_certificate_key /etc/nginx/ssl/project-b.key;
+
+    root /var/www/project_b;
+    index index.html index.htm;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}
+```
+
+### Проверим конфигурацию
+```
+sudo nginx -t
+```
+
+Все работает коректно
+
+### Проверяем результат
+Теперь надо првоерить работает ли наш редирикт, для этого откроем каждый сайт как http и автоматически должно перекинуть на https
+
+Видим что редирикт работает
+
+## Настройка Alias
+Перед тем, как настроить alias немного видоизменим наши проекты, добавив картинку в каждый. Для этого мы заранее создавали папку для изображений в каждом проекте, сейчас сюда загружаем наши изображения
+
+Сам Alias это механизм в Nginx, который позволяет создать виртуальный путь, указывающий на реальную директорую на сервере, позволяет создавать короткие URL вместо длинных и сложных, что удобно для статических файлов
+
+### Для проекта А
+Открываем и добавлем новый блок location для alias
+```
+location /pics_a/ {
+    alias /var/www/project_a/static/images/;
+}
+```
+
+### Для проекта B все в целом то же самое 
+```
+location /pics_b/ {
+    alias /var/www/project_b/static/images/;
+}
+```
+
+### Проверяем синтаксис Nginx + перезагрузка
+```
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+### Обновляем HTML для использования alias
+Теперь в файле index.html каждого проекта заменяем путь к картинкам
+
+для проекта А:
+```
+<img src="/pics_a/cat.jpg" alt="Cat">
+```
+
+Для проекта B:
+```
+<img src="/pics_b/dog.jpg" alt="Dog">
+```
+
+## Обзор наших двух готовых проектов
+
+### проект A:
+
+### Проект B:
 
 
