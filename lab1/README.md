@@ -74,12 +74,15 @@ sudo nano /var/www/project_a/index.html
 ```
 
 Вставляем туда базовый код:
+
 <img width="458" height="287" alt="Screenshot from 2025-11-10 16-33-42" src="https://github.com/user-attachments/assets/a8b1fad6-a6c3-474b-8a2c-d77f1fbe2c15" />
 
 и также для второго проекта
+
 <img width="532" height="287" alt="Screenshot from 2025-11-10 16-37-09" src="https://github.com/user-attachments/assets/7dbe08c8-cb0e-40c3-83e3-ba7db8e142c1" />
 
 проверяем что файлы создались корректно:
+
 <img width="822" height="512" alt="Screenshot from 2025-11-10 16-38-26" src="https://github.com/user-attachments/assets/8a250b84-3c5e-4cbc-94ce-f3bc32a096fa" />
 
 ### Настройка прав доступа
@@ -110,7 +113,7 @@ ls -l /var/www/project_a
 
 <img width="902" height="112" alt="Screenshot from 2025-11-10 16-45-02" src="https://github.com/user-attachments/assets/bb0d9f94-67ab-401b-aaba-a1e4f36e10ee" />
 
-## Настройка виртуальных хостов
+## Шаг 3. Настройка виртуальных хостов
 
 ### Создаем конфиг для проекта A
 ```
@@ -151,6 +154,8 @@ server {
     }
 }
 ```
+<img width="807" height="335" alt="Screenshot from 2025-11-10 20-16-38" src="https://github.com/user-attachments/assets/25c709f1-06f9-402d-a0a2-9abbbf71a02c" />
+
 
 ### Активируем сайты
 Создаем симвалические ссылки в sites-enabled, чтобы Nginx их увидел
@@ -165,6 +170,7 @@ sudo ln -s /etc/nginx/sites-available/project_b /etc/nginx/sites-enabled/
 ```
 sudo nginx -t
 ```
+<img width="862" height="94" alt="Screenshot from 2025-11-10 20-20-07" src="https://github.com/user-attachments/assets/7ceddcda-00f7-4d4c-89a2-664b5f9f3c92" />
 
 Здесь видем вывод syntax is ok, значит у нас все работает верно 
 
@@ -173,7 +179,9 @@ sudo nginx -t
 sudo systemctl reload nginx
 ```
 
-### настройка локальных доменов:
+
+
+### Настройка локальных доменов:
 Чтобы тестировать наши сайты на локальной машине (основном устройстве)
 
 ```
@@ -191,9 +199,14 @@ ping -c 2 project-a.local
 ping -c 2 project-b.local
 ```
 
-Здесь видим, что нам отвечаю, а это отдельный повод для радости, потому что значит все работает как надо и все пакеты доходят до цели
+<img width="862" height="277" alt="Screenshot from 2025-11-10 20-21-20" src="https://github.com/user-attachments/assets/95c557a0-3d32-41f7-abab-e4d001513259" />
 
-## Шаг 5. Настройка SSL сертификатов
+
+<img width="862" height="362" alt="Screenshot from 2025-11-10 20-22-26" src="https://github.com/user-attachments/assets/1b43f651-e4e0-4e8e-b8e6-c16b0a3af182" />
+
+Здесь видим, что нам отвечают, а это отдельный повод для радости, потому что значит все работает как надо и все пакеты доходят до цели
+
+## Шаг 4. Настройка SSL сертификатов
 
 ### Создание папки для хранения сертификатов
 ```
@@ -218,6 +231,9 @@ Common Name — project-a.local.
 * -keyout и -out пути для сохранения ключа и сертификата
 
 
+<img width="1029" height="423" alt="Screenshot from 2025-11-10 20-29-38" src="https://github.com/user-attachments/assets/373a6dc5-a21c-4489-be08-ecbaefc50d84" />
+
+
 Для проекта B аналогично:
 ```
 sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
@@ -227,10 +243,13 @@ sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
 
 Common Name — project-b.local
 
-## Настройка HTTPS-виртуальных хостов
+<img width="1029" height="515" alt="Screenshot from 2025-11-10 20-36-50" src="https://github.com/user-attachments/assets/4ca8eb64-1ed0-4882-8b5f-e7f64a0d0f35" />
+
+
+## Шаг 5. Настройка HTTPS-виртуальных хостов
 Теперь добавим новые блоки серверов (или изменим старые) в /etc/nginx/sites-available
 
-Открываем проект A и меняем содержимое:
+# Открываем проект A и меняем содержимое:
 ```
 # HTTP — перенаправляем на HTTPS
 server {
@@ -256,7 +275,11 @@ server {
 }
 ```
 
-Аналогично для проекта B:
+<img width="647" height="515" alt="Screenshot from 2025-11-10 20-41-35" src="https://github.com/user-attachments/assets/950317b6-c0f7-4bdb-8e98-b74eed8e4488" />
+
+
+
+# Аналогично для проекта B:
 ```
 server {
     listen 80;
@@ -279,5 +302,35 @@ server {
     }
 }
 ```
+
+<img width="647" height="515" alt="Screenshot from 2025-11-10 20-42-38" src="https://github.com/user-attachments/assets/6e7da0fe-db9d-4a0d-ba15-ede39ef4a65a" />
+
+Делаем вновь проверку, чтобы все работало корректно, радуемся что это так и делаем перезапуск:
+```
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+<img width="862" height="94" alt="Screenshot from 2025-11-10 20-20-07" src="https://github.com/user-attachments/assets/86260576-a5b4-4c81-a991-38125f30069a" />
+
+
+# Проверка работы HTTPS
+Открываем в браузере два наших проекта:
+* https://project-a.local
+* https://project-b.local
+
+Браузер конечно же показывает предупреждение, но мы доверяем своим же проектам, поэтому можем увидеть, что и проект А и проект В запускаются коректно!
+
+
+# Проект А:
+<img width="1004" height="665" alt="Screenshot from 2025-11-10 20-46-30" src="https://github.com/user-attachments/assets/292d8de3-3ed4-4f84-9f95-15e21f584aea" />
+
+<img width="1004" height="665" alt="Screenshot from 2025-11-10 20-46-19" src="https://github.com/user-attachments/assets/2714873c-1c56-4f7c-8131-bd07e71fd80c" />
+
+# Проект В:
+<img width="1209" height="721" alt="Screenshot from 2025-11-10 20-47-08" src="https://github.com/user-attachments/assets/62ce4eed-8fd4-4547-8c2d-b23fc9c0de44" />
+
+<img width="847" height="277" alt="Screenshot from 2025-11-10 20-47-20" src="https://github.com/user-attachments/assets/9a05b121-77e8-4de2-87f9-5b558312426d" />
+
 
 
