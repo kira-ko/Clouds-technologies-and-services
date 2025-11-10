@@ -1,0 +1,19 @@
+# Плохой Dockerfile с множественными bad practices
+
+FROM ubuntu:latest
+
+RUN apt-get update
+RUN apt-get install -y python3
+RUN apt-get install -y python3-pip
+RUN apt-get install -y curl
+RUN apt-get install -y wget
+RUN apt-get install -y vim
+RUN apt-get install -y git
+
+
+COPY . /app
+
+RUN chmod -R 777 /app
+
+CMD python3 /app/app.py
+
