@@ -432,15 +432,25 @@ sudo systemctl reload nginx
 <img src="/pics_a/cat.jpg" alt="Cat">
 ```
 
+<img width="851" height="306" alt="Screenshot from 2025-11-10 23-50-33" src="https://github.com/user-attachments/assets/ca470d18-5514-48e5-9f93-1d13febbb5fd" />
+
+
+
 Для проекта B:
 ```
 <img src="/pics_b/dog.jpg" alt="Dog">
 ```
+<img width="851" height="306" alt="Screenshot from 2025-11-11 00-01-10" src="https://github.com/user-attachments/assets/e629d82a-e3fb-4052-a275-c34fd38e4b0d" />
+
 
 ## Обзор наших двух готовых проектов
 
 ### проект A:
+<img width="671" height="668" alt="Screenshot from 2025-11-11 00-13-20" src="https://github.com/user-attachments/assets/bec20310-eea7-42d6-844e-4b538a7a3703" />
+
 
 ### Проект B:
+<img width="671" height="668" alt="Screenshot from 2025-11-11 00-13-12" src="https://github.com/user-attachments/assets/99f7e49e-8597-481e-a9a2-1a4c4b9fccb8" />
+
 
 
